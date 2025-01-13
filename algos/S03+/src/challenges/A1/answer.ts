@@ -7,11 +7,16 @@
  */
 
 // ↓ uncomment bellow lines and add your response!
-/*
 export default function ({ ads }: { ads: Ad[] }): Ad[] {
-  return [];
+  return ads.sort( (adA, adB)=>{
+    if(adA.price!==adB.price)
+      return adA.price-adB.price
+
+    if(adA.title<adB.title)
+      return -1
+    return 1
+  } )
 }
-*/
 
 // used interfaces, do not touch
 export interface Ad {

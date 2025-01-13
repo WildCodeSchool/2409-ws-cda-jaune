@@ -6,11 +6,15 @@
  */
 
 // ↓ uncomment bellow lines and add your response!
-/*
 export default function ({ users }: { users: User[] }): User[] {
-    return [];
+  return users.sort( (userA, userB)=>{
+    if(userA.email<userB.email)
+      return -1
+    return 1
+  }
+ )
 }
-*/
+
 
 // used interfaces, do not touch
 export interface User {

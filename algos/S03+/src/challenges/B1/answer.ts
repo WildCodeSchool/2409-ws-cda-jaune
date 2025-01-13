@@ -8,11 +8,15 @@
  */
 
 // ↓ uncomment bellow lines and add your response!
-/* 
 export default function ({ messages }: { messages: Message[] }): Message[] {
-  return [];
+return messages.sort((msgA, msgB)=>{
+  if(msgA.sentAt<msgB.sentAt)
+    return -1
+  if(msgA.sentAt>msgB.sentAt)
+    return 1
+  return msgA.content.length-msgB.content.length
+})
 }
- */
 
 // used interfaces, do not touch
 export interface Message {
