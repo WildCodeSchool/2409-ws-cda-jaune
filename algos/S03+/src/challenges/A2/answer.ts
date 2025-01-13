@@ -9,15 +9,23 @@
  */
 
 // ↓ uncomment bellow lines and add your response!
-/*
 export default function ({
   categories,
 }: {
   categories: Category[];
 }): CategoryWithTags[] {
-  return [];
+  return categories.map((category)=>{
+    let myTags:string[] = []
+    category.ads.map((ad)=>{
+      myTags = [...myTags, ...ad.tags]
+    })
+    myTags = myTags.sort((tagA, tagB)=>{
+      if(tagA<tagB) return -1
+      return 1
+    })      
+    return {...category, tags:Array.from(new Set(myTags))}
+  })
 }
-*/
 
 // used interfaces, do not touch
 interface Ad {
