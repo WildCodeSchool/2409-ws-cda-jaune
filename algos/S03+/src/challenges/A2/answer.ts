@@ -16,13 +16,18 @@ export default function ({
 }): CategoryWithTags[] {
   return categories.map((category)=>{
     let myTags:string[] = []
-    category.ads.map((ad)=>{
-      myTags = [...myTags, ...ad.tags]
-    })
-    myTags = myTags.sort((tagA, tagB)=>{
-      if(tagA<tagB) return -1
-      return 1
-    })      
+    // category.ads.map((ad)=>{
+    //   myTags = [...myTags, ...ad.tags]
+    // })
+    for(let i=0; i<category.ads.length;i++) {
+      myTags = [...myTags, ...category.ads[i].tags]
+    }
+
+    // myTags = myTags.sort((tagA, tagB)=>{
+    //   if(tagA<tagB) return -1
+    //   return 1
+    // })
+    myTags = myTags.sort()
     return {...category, tags:Array.from(new Set(myTags))}
   })
 }
