@@ -21,7 +21,12 @@ const start = async () => {
 
   const { url } = await startStandaloneServer(apiServer, {
     listen: { port: port },
+    context: async ({ res }) => {
+      console.log("Request received");
+      return { res };
+    },
   });
+
   console.log("Hey, ça marche ! =D");
   console.log(url);
 };
