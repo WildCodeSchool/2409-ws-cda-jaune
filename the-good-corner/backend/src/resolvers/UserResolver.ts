@@ -1,5 +1,6 @@
 import {
   Arg,
+  Authorized,
   Ctx,
   Field,
   InputType,
@@ -53,11 +54,13 @@ export class UserResolver {
       mail: userData.mail,
       hashedPassword: hashedPassword,
       name: userData.name,
+      roles: "USER",
     });
 
     const tokenContent = {
       mail: user.mail,
       name: user.name,
+      roles: user.roles,
     };
     const token = jwt.sign(tokenContent, process.env.JWT_SECRET);
     res.cookie("token", token, {
@@ -91,6 +94,7 @@ export class UserResolver {
     const tokenContent = {
       mail: user.mail,
       name: user.name,
+      roles: user.roles,
     };
     const token = jwt.sign(tokenContent, process.env.JWT_SECRET);
     res.cookie("token", token, {
@@ -104,5 +108,19 @@ export class UserResolver {
       name: user.name,
     };
     return JSON.stringify(profile);
+  }
+
+  @Authorized()
+  @Query(() => [User])
+  async getUsersAsUser() {
+    const users = await User.find();
+    return users;
+  }
+
+  @Authorized("ADMIN")
+  @Query(() => [User])
+  async getUsersAsAdmin() {
+    const users = await User.find();
+    return users;
   }
 }

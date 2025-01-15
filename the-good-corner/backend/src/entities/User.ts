@@ -19,4 +19,8 @@ export class User extends BaseEntity {
   @Field()
   @Column()
   hashedPassword!: string;
+
+  @Field()
+  @Column()
+  roles!: string; // "USER", "ADMIN", "USER,PLAYER"
 }
