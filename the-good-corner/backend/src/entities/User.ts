@@ -22,5 +22,5 @@ export class User extends BaseEntity {
 
   @Field()
   @Column()
-  roles!: string; // "USER", "ADMIN", "USER,PLAYER"
+  roles!: string; // "USER", "ADMIN", "USER,PLAYER" //"CAN_CREATE_SCENARII, CAN_EDIT_ADS"
 }

@@ -1,10 +1,6 @@
 ## Keskonafait:
 
-## KESKONFOUT:
-
-## Keskifofaire:
-
-### Authentification côté backend
+### Authentification côté backend - "Minimum vital"
 
 - ✅ Créer une entité User
 - ✅ Créer un resolver UserResolver
@@ -13,8 +9,36 @@
   - ✅ Renvoyer un profil public en clair de l'utilisateur
   - ✅ Set le header pour enregistrer le cookie d'auth
 - ✅ Implémenter le middleware de contexte Apollo
-- Implémenter authChecker
-- Ajouter le décorateur sur AdResolver pour empêcher un utilisateur anonyme de créer une annonce
+- ✅ Implémenter authChecker
+- ✅ Ajouter le décorateur sur AdResolver pour empêcher un utilisateur anonyme de créer une annonce
+
+### Authentification côté backend - Bonus et refacto
+
+- ✅ makefile: ajouter une fonction "stop"
+- ✅ Supprimer fichiers inutiles suite à changements d'outils
+  - ✅ `wild.sqlite` Migration de SQLite à Postgres
+  - ✅ `requests.http` Fichier de requetes REST, inutile depuis GraphQL
+  - ✅ `migrations/` Non utilisées (générées automatiquement par TypeORM au besoin)
+
+## KESKONFOUT:
+
+## Keskifofaire:
+
+### Authentification côté backend - Bonus et refacto
+
+- index.ts > authChecker
+  - ✅ nettoyer commentaires & logs
+  - ✅ adapter algo pour gérer le multiroles
+- index.ts > context
+  - mieux séparer les tokens (cas d'un token setté ultérieurement)
+- UserResolver
+  - Dédupliquer code
+  - Supprimer méthodes inutiles
+- AdResolver
+  - Rendre des méthodes privées
+    - createAd
+    - deleteAdById
+    - replaceAdById
 
 ## Backlog et bugfixes pour plus tard:
 

@@ -9,7 +9,8 @@ import { CategoryResolver } from "./resolvers/CategoryResolver";
 import { TagResolver } from "./resolvers/TagResolver";
 import { UserResolver } from "./resolvers/UserResolver";
 
-const port = 3000;
+const port = process.env.BACKEND_PORT;
+if (!port) throw new Error("Missing env variable: BACKEND_PORT");
 
 const start = async () => {
   await dataSource.initialize();
@@ -17,29 +18,20 @@ const start = async () => {
   const schema = await buildSchema({
     resolvers: [AdResolver, CategoryResolver, TagResolver, UserResolver],
     authChecker: ({ context }, neededRoles) => {
-      // Interdit tout à tous
-      // return false;
+      const rights: string[] = context.user?.roles.split("");
+      if (!rights.length) return false;
+      if (rights.includes("GOD")) return true;
 
-      // Autorise tout à tous
-      // return true;
-
-      // Autorise tout utilisateur connecté
-      // if (context.user?.roles) return true;
-      // else return false;
-
-      // Autorise en fonction des roles
-      console.log(neededRoles);
-      console.log(context.user?.roles);
-
-      if (neededRoles.includes(context.user?.roles)) return true;
-      return false;
+      return neededRoles.some((roleCandidate) =>
+        rights.includes(roleCandidate)
+      );
     },
   });
 
   const apiServer = new ApolloServer({ schema });
 
   const { url } = await startStandaloneServer(apiServer, {
-    listen: { port: port },
+    listen: { port },
     context: async ({ req, res }) => {
       if (!process.env.JWT_SECRET) return { res };
       const token = req.headers.cookie?.split("token=")[1];
@@ -55,7 +47,6 @@ const start = async () => {
     },
   });
 
-  console.log("Hey, ça marche ! =D");
-  console.log(url);
+  console.log("Backend started on port#" + port);
 };
 start();
