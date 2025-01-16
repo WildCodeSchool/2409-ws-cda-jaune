@@ -27,20 +27,26 @@
   - ✅ > context
     - ✅ mieux séparer les tokens (cas d'un token setté ultérieurement)
 
+### Authentification côté frontend - "Minimum vital"
+
+- ✅ Créer une page de test
+- ✅ Créer un form de base qui appelle la mutation `login`
+  - ✅ Relancer codegen
+  - ✅ Ecrire la mutation
+  - ✅ Verifier les hooks de mutation/query
+  - ✅ Utiliser le hook dans la page de test
+  - ✅ Au premier submit: pas de token dans les cookies
+  - ✅ Au second submit: token dans le header cookie
+
 ## KESKONFOUT:
 
 ## Keskifofaire:
 
-### Authentification côté frontend - "Minimum vital"
+### Authentification côté frontend - Bonus et refacto
 
-- ✅Créer une page de test
-- Créer un form de base qui appelle la mutation `login`
-  - Relancer codegen
-  - Ecrire la mutation
-  - Verifier les hooks de mutation/query
-  - Utiliser le hook dans la page de test
-  - ❓ Au premier submit: pas de token dans les cookies
-  - ❓ Au second submit: token dans le header cookie
+- ✅ Recuperer des infos publiques de la reponse à la mutation login
+- ✅ Implementer un store global (Context/Redux/Zustand) dans lequel stocker mes infos de connexion
+- Afficher une info du store dans un composant non lié au formulaire
 
 ### Authentification côté backend - Bonus et refacto
 
