@@ -6,6 +6,8 @@ RUN npm i
 COPY index.html ./
 COPY tsconfig*.json ./
 COPY vite.config.ts ./
+COPY codegen.ts ./
+
 COPY public/ public/
 COPY src/ src/
 

@@ -9,7 +9,7 @@ import { CategoryResolver } from "./resolvers/CategoryResolver";
 import { TagResolver } from "./resolvers/TagResolver";
 import { UserResolver } from "./resolvers/UserResolver";
 
-const port = process.env.BACKEND_PORT;
+const port = Number(process.env.BACKEND_PORT);
 if (!port) throw new Error("Missing env variable: BACKEND_PORT");
 
 const start = async () => {
@@ -39,6 +39,7 @@ const start = async () => {
       if (!token) return { res };
 
       const tokenContent = jwt.verify(token, process.env.JWT_SECRET);
+      console.log("Found user: ", tokenContent);
 
       return {
         res,
