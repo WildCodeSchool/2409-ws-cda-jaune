@@ -5,10 +5,12 @@ import { AdResolver } from "./resolvers/AdResolver";
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import * as jwt from "jsonwebtoken";
+import { config } from "dotenv";
 import { CategoryResolver } from "./resolvers/CategoryResolver";
 import { TagResolver } from "./resolvers/TagResolver";
 import { UserResolver } from "./resolvers/UserResolver";
 
+config();
 const port = Number(process.env.BACKEND_PORT);
 if (!port) throw new Error("Missing env variable: BACKEND_PORT");
 
