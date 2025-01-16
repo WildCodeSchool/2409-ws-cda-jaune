@@ -19,6 +19,13 @@
   - ✅ `wild.sqlite` Migration de SQLite à Postgres
   - ✅ `requests.http` Fichier de requetes REST, inutile depuis GraphQL
   - ✅ `migrations/` Non utilisées (générées automatiquement par TypeORM au besoin)
+- index.ts
+  - ✅ caster le numéro de port en Number
+  - ✅ > authChecker
+    - ✅ nettoyer commentaires & logs
+    - ✅ adapter algo pour gérer le multiroles
+  - ✅ > context
+    - ✅ mieux séparer les tokens (cas d'un token setté ultérieurement)
 
 ## KESKONFOUT:
 
@@ -26,14 +33,10 @@
 
 ### Authentification côté backend - Bonus et refacto
 
-- index.ts > authChecker
-  - ✅ nettoyer commentaires & logs
-  - ✅ adapter algo pour gérer le multiroles
-- index.ts > context
-  - mieux séparer les tokens (cas d'un token setté ultérieurement)
 - UserResolver
   - Dédupliquer code
   - Supprimer méthodes inutiles
+  - Créer un enum des types possibles
 - AdResolver
   - Rendre des méthodes privées
     - createAd

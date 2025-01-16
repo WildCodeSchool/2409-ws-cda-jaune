@@ -9,7 +9,7 @@ import { CategoryResolver } from "./resolvers/CategoryResolver";
 import { TagResolver } from "./resolvers/TagResolver";
 import { UserResolver } from "./resolvers/UserResolver";
 
-const port = process.env.BACKEND_PORT;
+const port = Number(process.env.BACKEND_PORT);
 if (!port) throw new Error("Missing env variable: BACKEND_PORT");
 
 const start = async () => {
@@ -30,7 +30,7 @@ const start = async () => {
 
   const apiServer = new ApolloServer({ schema });
 
-  const { url } = await startStandaloneServer(apiServer, {
+  await startStandaloneServer(apiServer, {
     listen: { port },
     context: async ({ req, res }) => {
       if (!process.env.JWT_SECRET) return { res };
