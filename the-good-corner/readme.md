@@ -31,6 +31,17 @@
 
 ## Keskifofaire:
 
+### Authentification côté frontend - "Minimum vital"
+
+- ✅Créer une page de test
+- Créer un form de base qui appelle la mutation `login`
+  - Relancer codegen
+  - Ecrire la mutation
+  - Verifier les hooks de mutation/query
+  - Utiliser le hook dans la page de test
+  - ❓ Au premier submit: pas de token dans les cookies
+  - ❓ Au second submit: token dans le header cookie
+
 ### Authentification côté backend - Bonus et refacto
 
 - UserResolver

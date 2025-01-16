@@ -54,7 +54,9 @@ export type Mutation = {
   __typename?: 'Mutation';
   createAd: Ad;
   deleteAdById: Scalars['Boolean']['output'];
+  login: Scalars['String']['output'];
   replaceAdById: Ad;
+  signup: Scalars['String']['output'];
 };
 
 
@@ -68,9 +70,25 @@ export type MutationDeleteAdByIdArgs = {
 };
 
 
+export type MutationLoginArgs = {
+  data: UserInput;
+};
+
+
 export type MutationReplaceAdByIdArgs = {
   adId: Scalars['String']['input'];
   data: AdInput;
+};
+
+
+export type MutationSignupArgs = {
+  data: NewUserInput;
+};
+
+export type NewUserInput = {
+  mail: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 export type Query = {
@@ -81,6 +99,9 @@ export type Query = {
   getAdsByNeedle: Array<Ad>;
   getCategories: Array<Category>;
   getTags: Array<Tag>;
+  getUsers: Array<User>;
+  getUsersAsAdmin: Array<User>;
+  getUsersAsUser: Array<User>;
 };
 
 
@@ -103,6 +124,20 @@ export type Tag = {
   ads: Array<Ad>;
   id: Scalars['String']['output'];
   name: Scalars['String']['output'];
+};
+
+export type User = {
+  __typename?: 'User';
+  hashedPassword: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  mail: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  roles: Scalars['String']['output'];
+};
+
+export type UserInput = {
+  mail: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 export type GetCategoriesAndTagsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -162,6 +197,13 @@ export type GetAdsByNeedleQueryVariables = Exact<{
 
 
 export type GetAdsByNeedleQuery = { __typename?: 'Query', getAdsByNeedle: Array<{ __typename?: 'Ad', id: string, title: string }> };
+
+export type LoginMutationVariables = Exact<{
+  data: UserInput;
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login: string };
 
 
 export const GetCategoriesAndTagsDocument = gql`
@@ -531,3 +573,34 @@ export type GetAdsByNeedleQueryHookResult = ReturnType<typeof useGetAdsByNeedleQ
 export type GetAdsByNeedleLazyQueryHookResult = ReturnType<typeof useGetAdsByNeedleLazyQuery>;
 export type GetAdsByNeedleSuspenseQueryHookResult = ReturnType<typeof useGetAdsByNeedleSuspenseQuery>;
 export type GetAdsByNeedleQueryResult = Apollo.QueryResult<GetAdsByNeedleQuery, GetAdsByNeedleQueryVariables>;
+export const LoginDocument = gql`
+    mutation Login($data: UserInput!) {
+  login(data: $data)
+}
+    `;
+export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
+
+/**
+ * __useLoginMutation__
+ *
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
+      }
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
