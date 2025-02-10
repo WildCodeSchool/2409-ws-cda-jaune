@@ -10,7 +10,6 @@
  */
 
 // ↓ uncomment bellow lines and add your response!
-/* 
 export default function ({
   lastActivityDatetime,
   messages,
@@ -18,9 +17,15 @@ export default function ({
   lastActivityDatetime: string;
   messages: Message[];
 }): MessageWithUnread[] {
-  return [];
+  return messages
+    .sort((msg1, msg2) => (msg1.sentAt < msg2.sentAt ? -1 : 1))
+    .map((elt) => ({ ...elt, unread: elt.sentAt > lastActivityDatetime }));
+
+  // NB: L'énoncé donne presque l'algo
+  // .sort sur message.sentAt
+  // .map pour ajouter une clé "unread"
+  //  -> msg.sentAt>lastActivity
 }
- */
 
 // used interfaces, do not touch
 export interface Message {
