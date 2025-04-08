@@ -34,13 +34,48 @@
  */
 
 // ↓ uncomment bellow lines and add your response!
-// export default function ({
-//   openingSlots,
-//   isoWeekday,
-// }: {
-//   openingSlots: OpeningSlot[];
-//   isoWeekday: number;
-// }): PlanningSlot[] {}
+export default function ({
+  openingSlots,
+  isoWeekday,
+}: {
+  openingSlots: OpeningSlot[];
+  isoWeekday: number;
+}): PlanningSlot[] {
+  // Virer les infos sur les jours inutiles
+  const dayOpeningSlots = openingSlots.filter(
+    (slot) => slot.isoWeekday === isoWeekday
+  );
+  const fullDaySchedule: PlanningSlot[] = [];
+
+  // On initialise chaque créneau en "closed"
+  for (let hour = 0; hour < 24; hour++) {
+    const fromTime = `${String(hour).padStart(2, "0")}:00`;
+    const toTime = `${String((hour + 1) % 24).padStart(2, "0")}:00`;
+    fullDaySchedule.push({
+      fromTime,
+      toTime,
+      status: "closed",
+    });
+  }
+
+  // Pour chaque slot d'1h
+  const planning = fullDaySchedule.map((slot) => {
+    // Pour chaque créneau d'ouverture dans l'input
+    dayOpeningSlots.forEach((openingSlot) => {
+      // On teste par ordre alphabétique (ça marche, pas besoin de complexifier plus que ça 🤷)
+      if (
+        openingSlot.opensAt <= slot.fromTime &&
+        slot.fromTime < openingSlot.closesAt &&
+        openingSlot.opensAt < slot.toTime &&
+        slot.toTime <= openingSlot.closesAt
+      ) {
+        slot.status = "opened";
+      }
+    });
+    return slot;
+  });
+  return planning;
+}
 
 // used interfaces, do not touch
 export interface OpeningSlot {
