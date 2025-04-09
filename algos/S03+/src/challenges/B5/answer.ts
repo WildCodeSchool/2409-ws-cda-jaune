@@ -39,15 +39,52 @@
  */
 
 // ↓ uncomment bellow lines and add your response!
-// export default function ({
-//   messages,
-//   fromDatetime,
-//   toDatetime,
-// }: {
-//   messages: Message[];
-//   fromDatetime: string;
-//   toDatetime: string;
-// }): MessageStatsSlot[] {}
+export default function ({
+  messages,
+  fromDatetime,
+  toDatetime,
+}: {
+  messages: Message[];
+  fromDatetime: string;
+  toDatetime: string;
+}): MessageStatsSlot[] {
+  const ONE_HOUR = 3_600_000;
+  const result: MessageStatsSlot[] = [];
+
+  // Grooming des dates bornes
+  const fromDate = new Date(fromDatetime);
+  fromDate.setUTCMinutes(0, 0, 0);
+  const toDate = new Date(toDatetime);
+  if (
+    toDate.getUTCMinutes() !== 0 ||
+    toDate.getUTCSeconds() !== 0 ||
+    toDate.getUTCMilliseconds() !== 0
+  ) {
+    toDate.setUTCHours(toDate.getUTCHours() + 1, 0, 0, 0);
+  }
+
+  // Initialisation des objets et des compteurs de messages à 0
+  const start = fromDate.getTime();
+  const end = toDate.getTime();
+  for (let time = start; time < end; time += ONE_HOUR) {
+    result.push({
+      fromDatetime: new Date(time).toISOString(),
+      toDatetime: new Date(time + ONE_HOUR).toISOString(),
+      messagesCount: 0,
+    });
+  }
+
+  messages.forEach((message) => {
+    const sentAt = new Date(message.sentAt).getTime();
+    if (sentAt >= start && sentAt < end) {
+      // Un element par heure -> On peut utiliser le Math.floor pour trouver la bonne "case horaire"
+      const index = Math.floor((sentAt - start) / ONE_HOUR);
+      result[index].messagesCount++;
+    }
+  });
+
+  return result;
+}
 
 // used interfaces, do not touch
 export interface Message {
