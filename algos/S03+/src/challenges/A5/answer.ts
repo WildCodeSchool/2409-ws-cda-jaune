@@ -34,6 +34,50 @@
  */
 
 // ↓ uncomment bellow lines and add your response!
+// export default function ({
+//   openingSlots,
+//   isoWeekday,
+// }: {
+//   openingSlots: OpeningSlot[];
+//   isoWeekday: number;
+// }): PlanningSlot[] {
+//   // Virer les infos sur les jours inutiles
+//   const dayOpeningSlots = openingSlots.filter(
+//     (slot) => slot.isoWeekday === isoWeekday
+//   );
+//   const fullDaySchedule: PlanningSlot[] = [];
+
+//   // On initialise chaque créneau en "closed"
+//   for (let hour = 0; hour < 24; hour++) {
+//     const fromTime = `${String(hour).padStart(2, "0")}:00`;
+//     const toTime = `${String((hour + 1) % 24).padStart(2, "0")}:00`;
+//     fullDaySchedule.push({
+//       fromTime,
+//       toTime,
+//       status: "closed",
+//     });
+//   }
+
+//   // Pour chaque slot d'1h
+//   const planning = fullDaySchedule.map((slot) => {
+//     // Pour chaque créneau d'ouverture dans l'input
+//     dayOpeningSlots.forEach((openingSlot) => {
+//       // On teste par ordre alphabétique (ça marche, pas besoin de complexifier plus que ça 🤷)
+//       if (
+//         openingSlot.opensAt <= slot.fromTime &&
+//         slot.fromTime < openingSlot.closesAt &&
+//         openingSlot.opensAt < slot.toTime &&
+//         slot.toTime <= openingSlot.closesAt
+//       ) {
+//         slot.status = "opened";
+//       }
+//     });
+//     return slot;
+//   });
+//   return planning;
+// }
+
+//Seconde solution, proposée par Nicolas (merci!)
 export default function ({
   openingSlots,
   isoWeekday,
@@ -41,40 +85,28 @@ export default function ({
   openingSlots: OpeningSlot[];
   isoWeekday: number;
 }): PlanningSlot[] {
-  // Virer les infos sur les jours inutiles
-  const dayOpeningSlots = openingSlots.filter(
-    (slot) => slot.isoWeekday === isoWeekday
-  );
-  const fullDaySchedule: PlanningSlot[] = [];
-
-  // On initialise chaque créneau en "closed"
-  for (let hour = 0; hour < 24; hour++) {
-    const fromTime = `${String(hour).padStart(2, "0")}:00`;
-    const toTime = `${String((hour + 1) % 24).padStart(2, "0")}:00`;
-    fullDaySchedule.push({
-      fromTime,
-      toTime,
+  const planning = new Map<number, PlanningSlot>();
+  for (let i = 0; i < 24; i++) {
+    planning.set(i, {
+      fromTime: `${String(i).padStart(2, "0")}:00`,
+      toTime: `${String(i + 1).padStart(2, "0")}:00`,
       status: "closed",
     });
   }
 
-  // Pour chaque slot d'1h
-  const planning = fullDaySchedule.map((slot) => {
-    // Pour chaque créneau d'ouverture dans l'input
-    dayOpeningSlots.forEach((openingSlot) => {
-      // On teste par ordre alphabétique (ça marche, pas besoin de complexifier plus que ça 🤷)
-      if (
-        openingSlot.opensAt <= slot.fromTime &&
-        slot.fromTime < openingSlot.closesAt &&
-        openingSlot.opensAt < slot.toTime &&
-        slot.toTime <= openingSlot.closesAt
-      ) {
-        slot.status = "opened";
+  openingSlots
+    .filter((slot) => slot.isoWeekday === isoWeekday)
+    .forEach((slot) => {
+      const from =
+        parseInt(slot.opensAt) + (slot.opensAt.endsWith(":00") ? 0 : 1);
+      const to = parseInt(slot.closesAt) || 24;
+      for (let i = from; i < to; i++) {
+        planning.get(i)!.status = "opened";
       }
     });
-    return slot;
-  });
-  return planning;
+
+  planning.get(23)!.toTime = "00:00";
+  return Array.from(planning.values());
 }
 
 // used interfaces, do not touch
