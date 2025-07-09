@@ -1,0 +1,12 @@
+.vscode/
+!.env.sample
+**/node_modules/
+**/.env.*
+persist/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/tests-examples/

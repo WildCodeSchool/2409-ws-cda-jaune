@@ -1,0 +1,37 @@
+{
+  "name": "roleet-backend",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "npm run db:fixtures && nodemon --exec ts-node -- ./src/index.ts",
+    "start": "node build/index.js",
+    "db:fixtures": "ts-node ./src/scripts/fixtures/script.ts",
+    "unit-tests": "vitest",
+    "integration-tests": "echo 'TODO: Run Integration Tests'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/server": "^4.12.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "graphql": "^16.11.0",
+    "graphql-scalars": "^1.24.2",
+    "pg": "^8.16.0",
+    "reflect-metadata": "^0.2.2",
+    "type-graphql": "^2.0.0-rc.2",
+    "typeorm": "^0.3.11",
+    "argon2": "^0.43.0",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/node": "^24.0.0",
+    "eslint": "^9.28.0",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
