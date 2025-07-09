@@ -1,6 +1,5 @@
 import {
   Arg,
-  Authorized,
   Ctx,
   Field,
   InputType,
@@ -61,7 +60,6 @@ class ScenarioResolver {
     });
   }
 
-  @Authorized()
   @Query(() => [Scenario])
   getMyScenarios(@Ctx() ctx: AuthContext) {
     return Scenario.find({
@@ -70,7 +68,6 @@ class ScenarioResolver {
     });
   }
 
-  @Authorized()
   @Query(() => Scenario)
   getScenario(@Arg("id") id: string, @Ctx() context: AuthContext) {
     return Scenario.findOne({
@@ -83,7 +80,6 @@ class ScenarioResolver {
     });
   }
 
-  @Authorized()
   @Mutation(() => Scenario)
   async createScenario(
     @Arg("data") scenarioData: NewScenarioInput,
@@ -99,7 +95,6 @@ class ScenarioResolver {
     return newScenario;
   }
 
-  @Authorized()
   @Mutation(() => Scenario)
   updateScenario(
     @Arg("id") id: string,
@@ -117,7 +112,6 @@ class ScenarioResolver {
       .catch(handleDatabaseError("Failed to update scenario"));
   }
 
-  @Authorized()
   @Mutation(() => Boolean)
   deleteScenario(@Arg("id") id: string, @Ctx() context: AuthContext) {
     return Scenario.delete({ id, owner: { id: context.user.id } })
@@ -125,7 +119,6 @@ class ScenarioResolver {
       .catch(handleDatabaseError("Failed to delete scenario", true));
   }
 
-  @Authorized()
   @Mutation(() => Boolean)
   unsealScenario(@Arg("id") id: string, @Ctx() context: AuthContext) {
     return Scenario.findOne({
