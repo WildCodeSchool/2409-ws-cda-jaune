@@ -6,17 +6,17 @@ export const SIGNUP = gql`
   }
 `;
 
-export const LOGIN = gql`
-  mutation login($data: UserInput!) {
-    login(data: $data)
-  }
-`;
+// export const LOGIN = gql`
+//   mutation login($data: UserInput!) {
+//     login(data: $data)
+//   }
+// `;
 
-export const LOGOUT = gql`
-  mutation logout {
-    logout
-  }
-`;
+// export const LOGOUT = gql`
+//   mutation logout {
+//     logout
+//   }
+// `;
 
 export const GET_ALL_USERS = gql`
   query getAllUsers {

@@ -7,8 +7,8 @@
   - record user
   - renvoyer profil public
   - renvoyer token en cookie
-- methode login
 - context
+- methode login
 - createScenario -> record user
 
 # Autorisation

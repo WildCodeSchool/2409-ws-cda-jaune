@@ -1,5 +1,6 @@
 import {
   Arg,
+  Authorized,
   Ctx,
   Field,
   InputType,
@@ -80,6 +81,7 @@ class ScenarioResolver {
     });
   }
 
+  @Authorized()
   @Mutation(() => Scenario)
   async createScenario(
     @Arg("data") scenarioData: NewScenarioInput,

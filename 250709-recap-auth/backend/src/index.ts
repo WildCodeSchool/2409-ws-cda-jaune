@@ -6,6 +6,7 @@ import { buildSchema } from "type-graphql";
 import { dataSource } from "./lib/typeorm/dataSource";
 import resolvers from "./resolvers";
 import { verify } from "jsonwebtoken";
+import { Role } from "./entities/User";
 
 dotenv.config();
 
@@ -13,7 +14,19 @@ const start = async () => {
   await dataSource.initialize();
   const schema = await buildSchema({
     resolvers,
-    //authChecker,
+    authChecker: ({ context: { user } }, neededRoles) => {
+      // si pas d'user: ❌
+      if (!user) return false;
+
+      // si neededRoles est vide: ✅
+      if (!neededRoles.length) return true;
+
+      // si user a le role "ADMIN": ✅
+      if (user.roles.includes(Role.ADMIN)) return true;
+
+      // si user a un role listé dans neededRoles: ✅
+      return neededRoles.some((role) => user.roles.includes(role));
+    },
   });
 
   const server = new ApolloServer({ schema });
