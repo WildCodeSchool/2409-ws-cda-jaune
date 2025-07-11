@@ -39,6 +39,13 @@ function setAuthCookie(user: User, context: AnonContext) {
     `roleetAuthToken=${token};secure;httpOnly;ameSite=Strict;expires=${now.toUTCString()}`
   );
 }
+function resetAuthCookie(context: AnonContext) {
+  const now = new Date();
+  context.res.setHeader(
+    "Set-Cookie",
+    `roleetAuthToken="";expires=${now.toUTCString()}`
+  );
+}
 
 @InputType()
 class NewUserInput {
@@ -107,8 +114,9 @@ class UserResolver {
 
   @Authorized()
   @Mutation(() => String)
-  async deleteUser(@Arg("userId") id: String) {
-    return id;
+  async logout(@Ctx() context: AnonContext) {
+    resetAuthCookie(context);
+    return "Goodbye";
   }
 }
 

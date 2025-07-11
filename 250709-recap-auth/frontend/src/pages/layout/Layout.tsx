@@ -22,11 +22,8 @@ export default function Layout() {
   }, [location.pathname]);
   return (
     <SidebarProvider defaultOpen={false} open={open} onOpenChange={setOpen}>
-      <div className="absolute">
-        <AppSidebar />
-      </div>
+      <div className="absolute"></div>
       <main className="dark m-auto mt-0 w-8/12">
-        <SidebarTrigger />
         <Outlet />
       </main>
       <Toaster />

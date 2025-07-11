@@ -1,40 +1,28 @@
-import type { CurrentUser } from "@/lib/zod/auth";
-import { produce } from "immer";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
-
-type State = {
-  user: CurrentUser | null;
-  login: (user: CurrentUser) => void;
-  logout: () => void;
-  readScenario: (scenId: string) => void;
+type UserProfile = {
+  name: string;
 };
 
-const useStore = create<State>()(
+type UserState = {
+  currentUser: UserProfile | null;
+  login: (user: string) => void;
+  logout: () => void;
+};
+
+const useUserStore = create<UserState>()(
   devtools(
     persist(
       (set) => ({
-        user: null,
-        login: (user: CurrentUser) => set(() => ({ user: user })),
-        logout: () => set(() => ({ user: null })),
-        readScenario: (scenId: string) => {
-          set(
-            produce((state: State) => {
-              if (state.user && !state.user.readScenarios.includes(scenId)) {
-                state.user.readScenarios.push(scenId);
-              }
-            }),
-          );
-        },
+        currentUser: null,
+        login: (user) => set({ currentUser: JSON.parse(user) }),
+        logout: () => set({ currentUser: null }),
       }),
-      {
-        name: "user-store",
-      },
-    ),
-  ),
+      { name: "user-store" }
+    )
+  )
 );
 
-export const useCurrentUser = () => useStore((state) => state.user);
-export const useLogin = () => useStore((state) => state.login);
-export const useLogout = () => useStore((state) => state.logout);
-export const useUnsealScenario = () => useStore((state) => state.readScenario);
+export const useCurrentUser = () => useUserStore((state) => state.currentUser);
+export const useLogin = () => useUserStore((state) => state.login);
+export const useLogout = () => useUserStore((state) => state.logout);

@@ -1,33 +1,50 @@
-import { useLogoutMutation } from "@/lib/graphql/generated/graphql-types";
-import { Button } from "@/lib/shadcn/generated/ui/button";
+import {
+  useLoginMutation,
+  useLogoutMutation,
+  UserInput,
+} from "@/lib/graphql/generated/graphql-types";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@/lib/shadcn/generated/ui/tabs";
-import { useCurrentUser, useLogout } from "@/lib/zustand/userStore";
-import LoginForm from "../layout/LoginForm";
-import SignupForm from "../layout/SignupForm";
+import { useCurrentUser, useLogin, useLogout } from "@/lib/zustand/userStore";
+import { FormEvent } from "react";
 
 export default function AuthenticationPage() {
+  const [login] = useLoginMutation();
   const currentUser = useCurrentUser();
+  const loginToStore = useLogin();
+  const logoutToStore = useLogout();
   const [logout] = useLogoutMutation();
-  const unsetUserToStore = useLogout();
+
+  const hLogin = async (evt: FormEvent) => {
+    evt.preventDefault();
+    const formdata = new FormData(evt.currentTarget as HTMLFormElement);
+    const formJson = Object.fromEntries(formdata.entries());
+
+    // console.log(formJson);
+    const { data, errors } = await login({
+      variables: { data: formJson as UserInput },
+    });
+    if (errors) throw new Error(errors.toString());
+    if (!data)
+      throw new Error("Should not happend: no error but no data on hLogin");
+
+    loginToStore(data.login);
+  };
 
   const hLogout = () => {
     logout();
-    unsetUserToStore();
+    logoutToStore();
   };
 
-  if (currentUser?.name)
+  if (currentUser)
     return (
       <>
-        <p>You're logged in as {currentUser.name}</p>
-        <pre>{JSON.stringify(currentUser, null, 4)}</pre>
-        <Button type="submit" onClick={hLogout}>
-          Se déconnecter
-        </Button>
+        <p>Hello {currentUser.name} !</p>
+        <button onClick={hLogout}>Log out</button>
       </>
     );
 
@@ -39,11 +56,15 @@ export default function AuthenticationPage() {
           <TabsTrigger value="signup">S'inscrire</TabsTrigger>
         </TabsList>
         <TabsContent value="login">
-          <LoginForm />
+          <form onSubmit={hLogin}>
+            Email
+            <input type="text" name="mail" />
+            Password
+            <input type="password" name="password" />
+            <input type="submit" value="Login" />
+          </form>
         </TabsContent>
-        <TabsContent value="signup">
-          <SignupForm />
-        </TabsContent>
+        <TabsContent value="signup">{/* TODO */}</TabsContent>
       </Tabs>
     </>
   );
