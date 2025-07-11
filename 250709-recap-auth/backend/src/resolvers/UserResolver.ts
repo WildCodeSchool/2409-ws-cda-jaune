@@ -19,6 +19,7 @@ dotenv.config();
 function getPublicProfile(user: User) {
   return {
     name: user.name,
+    roles: user.roles,
   };
 }
 

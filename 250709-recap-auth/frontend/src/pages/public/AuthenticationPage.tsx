@@ -44,6 +44,14 @@ export default function AuthenticationPage() {
     return (
       <>
         <p>Hello {currentUser.name} !</p>
+        <ul>
+          {currentUser.roles.map((role) => (
+            <li key={role}>{role}</li>
+          ))}
+        </ul>
+        {currentUser.roles.includes("ADMIN") && (
+          <button>Make everything explode</button>
+        )}
         <button onClick={hLogout}>Log out</button>
       </>
     );
